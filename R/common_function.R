@@ -122,13 +122,13 @@ Aggregate_Sum_Group <- function(df_A, df_B, input_column_name, output_column_nam
 SummaryValue <- function(input_column){
   target_na <- subset(input_column, is.na(input_column))
   target_column <- subset(input_column, !is.na(input_column))
-  temp_mean <- mean(target_column)
+  temp_mean <- round(mean(target_column), digits=1)
   temp_summary <- summary(target_column)
   temp_median <- median(target_column)
-  temp_quantile <- quantile(target_column, type=2)
+  temp_quantile <- round(quantile(target_column, type=2), digits=1)
   temp_min <- min(target_column)
   temp_max <- max(target_column)
-  temp_sd <- sd(target_column)
+  temp_sd <- round(sd(target_column), digits=1)
   return_list <- c(temp_mean, temp_sd, temp_median, temp_quantile[2], temp_quantile[4], temp_min, temp_max)
   names(return_list) <- c("Mean", "Sd.", "Median", "1st Qu.", "3rd Qu.", "Min.", "Max.")
   return(list(length(target_column), length(target_na), return_list))
@@ -280,4 +280,27 @@ Convert_summary_to_DF <- function(output_df, input_column, output_item_name){
   temp_output_df[ , 3] <- temp_df
   return_df <- rbind(output_df, temp_output_df)
   return(list(return_df, summary_list))
+}
+#' @title
+#'
+Convert_aggregate_to_DF <- function(output_df, target_column, output_item_name){
+  aggregate_list <- AggregateLength(target_column, c(output_item_name, kCount, kPercentage))
+  names(aggregate_list[[kN_index]]) <- "例数"
+  names(aggregate_list[[kNA_index]]) <- "欠測数"
+  row_count <- nrow(aggregate_list[[kDfIndex]]) + 2
+  temp_output_df <- data.frame(matrix(rep(NA),ncol=length(kOutputColnames), nrow=row_count))
+  colnames(temp_output_df) <- kOutputColnames
+  temp_output_df[ , 1] <- output_item_name
+  temp_output_df[1, 2] <- names(aggregate_list[[kN_index]])
+  temp_output_df[1, 3] <- aggregate_list[[kN_index]]
+  temp_output_df[2, 2] <- names(aggregate_list[[kNA_index]])
+  temp_output_df[2, 3] <- aggregate_list[[kNA_index]]
+  temp_df <- aggregate_list[[kDfIndex]]
+  for (i in 1:nrow(temp_df)) {
+    temp_output_df[i + 2, 2] <- temp_df[i, 1]
+    temp_output_df[i + 2, 3] <- temp_df[i, 2]
+    temp_output_df[i + 2, 4] <- temp_df[i, 3]
+  }
+  return_df <- rbind(output_df, temp_output_df)
+  return(list(return_df, aggregate_list))
 }
