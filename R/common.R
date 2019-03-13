@@ -7,12 +7,12 @@ kCTCAEGrade <- c(1:5)
 kExclude_FAS_flag <- 1
 kExclude_SAS_flag <- 2
 # The following constants are used for common_function.R
-kCount <- "count"
-kPercentage <- "percentage"
+kCount <- "Count"
+kPercentage <- "Percent"
 kN_index <- 1
 kNA_index <- 2
 kDfIndex <- 3
-kOutputColnames <- c("title", "grade", kCount, kPercentage)
+kOutputColnames <- c("Item", "Category", kCount, kPercentage)
 # initialize ------
 Sys.setenv("TZ" = "Asia/Tokyo")
 parent_path <- "/Users/admin/Desktop/NMC-Cryo2"
