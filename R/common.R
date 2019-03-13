@@ -35,7 +35,7 @@ for (i in 1:length(csv_list)) {
   temp_objectname <- switch (temp_seq,
     "1" = "registration",
     "2" = "treatment",
-    "3" = "end",
+    "3" = "ae",
     "4" = "sae"
   )
   assign(temp_objectname, read.csv(paste0(input_path, "/", csv_list[i]), as.is=T, fileEncoding="cp932",

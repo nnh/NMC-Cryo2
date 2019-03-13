@@ -22,4 +22,5 @@ if (this_program_path != "") {
 # all treatment
 source(paste0(source_path, "/common.R"))
 source(paste0(source_path, "/common_function.R"))
-source(paste0(source_path, "/demog.R"))
+render(paste0(source_path, "/demog.R"), output_dir=output_path, output_file="demog.html")
+render(paste0(source_path, "/ae.R"), output_dir=output_path, output_file="ae.html")
