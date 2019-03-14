@@ -9,6 +9,7 @@ library(rmarkdown)
 library(rstudioapi)
 library(knitr)
 library(sjlabelled)
+library(dplyr)
 knitr::opts_chunk$set(echo=F, comment=NA)
 # Getting the path of this program path
 if (Sys.getenv("R_PLATFORM") == "") {

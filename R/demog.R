@@ -146,7 +146,7 @@ output_name <- "Sp02"
 #' ## `r output_name`
 registration$num_SpO2 <- as.numeric(registration$Sp02)
 # -1 -> NA
-registration$num_SpO2 <- ifelse(registration$num_SpO2 == -1, NA, registration$num_SpO2)
+registration$num_SpO2 <- ifelse(registration$num_SpO2 == kNA_lb, NA, registration$num_SpO2)
 temp_colname <- "num_SpO2"
 temp_res_list <- Convert_summary_to_DF(output_demog_csv, registration[ ,temp_colname], "SpO2")
 output_demog_csv <- temp_res_list[[1]]

@@ -65,7 +65,6 @@ output_ae1_csv <- temp_res_list[[1]]
 kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 output_name <- "その他_有害事象Grade"
 #' ## `r output_name`
-#' ##
 temp_colname <- "AE_other_grade"
 temp_res_list <- Convert_aggregate_to_DF(output_ae1_csv ,ae[ ,temp_colname] , output_name)
 output_ae1_csv <- temp_res_list[[1]]
