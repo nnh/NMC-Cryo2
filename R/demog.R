@@ -40,7 +40,7 @@ kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 for (i in 1:7) {
   col_index <- 4 + i
   temp_colname <- paste0("demog_disease_", i)
-  registration[ ,temp_colname] <- ifelse(registration[ ,col_index] == 1, "あり", "なし")
+  registration[ ,temp_colname] <- registration[ ,col_index]
 }
 #+ results='asis'
 #' ### 原発性肺がん
@@ -55,7 +55,8 @@ for (i in 1:4) {
 output_name <- "原発性肺がん_その他詳細"
 #' ## `r output_name`
 temp_colname <- "disease_t1"
-assign(temp_colname, subset(registration, (registration[ ,temp_colname] != "" & registration[ ,"demog_disease_4"] == "あり"))[ ,temp_colname])
+assign(temp_colname, subset(registration, (!is.na(registration[ ,temp_colname])
+                                           & registration[ ,"demog_disease_4"] == "該当する"))[ ,temp_colname])
 get(temp_colname)
 temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
 colnames(temp_df) <- kOutputColnames
@@ -72,7 +73,8 @@ kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 output_name <- "転移性肺がんの原発巣"
 #' ### `r output_name`
 temp_colname <- "disease_t3"
-assign(temp_colname, subset(registration, registration[ ,temp_colname] != "")[ ,temp_colname])
+assign(temp_colname, subset(registration, (!is.na(registration[ ,temp_colname])
+                                           & registration[ ,"demog_disease_5"] == "該当する"))[ ,temp_colname])
 get(temp_colname)
 temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
 colnames(temp_df) <- kOutputColnames
@@ -95,7 +97,8 @@ kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 output_name <- "その他の悪性腫瘍_その他詳細"
 #' ### `r output_name`
 temp_colname <- "disease_t2"
-assign(temp_colname, subset(registration, registration[ ,temp_colname] != "")[ ,temp_colname])
+assign(temp_colname, subset(registration, (!is.na(registration[ ,temp_colname])
+                                           & registration[ ,"demog_disease_7"] == "該当する"))[ ,temp_colname])
 get(temp_colname)
 temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
 colnames(temp_df) <- kOutputColnames
@@ -112,9 +115,8 @@ kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 output_name <- "出血傾向の有無_有の場合はその詳細"
 #' ## `r output_name`
 temp_bleeding_t1_df <- subset(registration, bleeding == "あり")
-#subset(temp_bleeding_t1_df, bleeding_t1 != "")[,"bleeding_t1"]
 temp_colname <- "bleeding_t1"
-assign(temp_colname, subset(temp_bleeding_t1_df, temp_bleeding_t1_df[ ,temp_colname] != "")[ ,temp_colname])
+assign(temp_colname, subset(temp_bleeding_t1_df, !is.na(temp_bleeding_t1_df[ ,temp_colname]))[ ,temp_colname])
 get(temp_colname)
 temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
 colnames(temp_df) <- kOutputColnames
@@ -165,3 +167,4 @@ output_demog_csv <- temp_res_list[[1]]
 kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 # output csv
 write.csv(output_demog_csv, paste0(output_path, "/demog.csv"), row.names=F, fileEncoding = "cp932", na="")
+

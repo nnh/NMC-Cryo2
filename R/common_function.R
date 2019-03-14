@@ -22,7 +22,11 @@ AggregateLength <- function(target_column, column_name){
   target_not_na <- subset(target_column, !is.na(target_column))
   df <- aggregate(target_column, by=list(target_column), length, drop=F)
   df[is.na(df)] <- 0
-  df$per <- round(prop.table(df[2]) * 100, digits=1)
+  if (nrow(df) > 0) {
+    df$per <- round(prop.table(df[2]) * 100, digits=1)
+  } else {
+    df <- data.frame(matrix(rep(NA), ncol=length(column_name), nrow=1))
+  }
   colnames(df) <- column_name
   return(list(length(target_not_na), length(target_na), df))
 }

@@ -31,15 +31,14 @@ if (file.exists(output_path) == F) {
 # read rawdata
 csv_list <- list.files(input_path)
 for (i in 1:length(csv_list)) {
-  temp_seq <- substr(csv_list[i], 1, 1)
-  temp_objectname <- switch (temp_seq,
-    "1" = "registration",
-    "2" = "treatment",
-    "3" = "ae",
-    "4" = "sae"
+  temp_objectname <- switch (csv_list[i],
+    "症例登録票.csv" = "registration",
+    "治療.csv" = "treatment",
+    "最終評価.csv" = "ae",
+    "重症な有害事象.csv" = "sae"
   )
   assign(temp_objectname, read.csv(paste0(input_path, "/", csv_list[i]), as.is=T, fileEncoding="cp932",
-                                   stringsAsFactors=F))
+                                   stringsAsFactors=F, na.strings=""))
   assign(temp_objectname, get(temp_objectname)[-1, ])
 }
 all_qualification <- as.numeric(nrow(registration))
