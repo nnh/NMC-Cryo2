@@ -1,6 +1,16 @@
 # ' demog.R
 # ' Created date: 2019/3/12
 # ' author: mariko ohtsuka
+#' @title
+OutputFreetext <- function(temp_colname, output_name, output_demog_csv){
+  print(get(temp_colname))
+  temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
+  colnames(temp_df) <- kOutputColnames
+  temp_df[ ,1] <- output_name
+  temp_df[ ,2] <- get(temp_colname)
+  temp_df[ ,3] <- 1
+  output_demog_csv <- rbind(output_demog_csv, temp_df)
+}
 # Constant section ------
 kRegist_date_colname <- "ic_date"
 kBirth_date_colname <- "birthday"
@@ -15,7 +25,6 @@ temp_N <- c("Number of patients", NA, all_qualification, all_qualification / all
 output_demog_csv <- rbind(output_demog_csv, temp_N)
 colnames(output_demog_csv) <- kOutputColnames
 output_demog_csv <- ConvertFactor(output_demog_csv)
-#output_demog_csv[ ,kCount] <- as.character(output_demog_csv[ ,kCount])
 #'
 output_name <- "年齢"
 #' ## `r output_name`
@@ -42,28 +51,23 @@ for (i in 1:7) {
   temp_colname <- paste0("demog_disease_", i)
   registration[ ,temp_colname] <- registration[ ,col_index]
 }
-#+ results='asis'
 #' ### 原発性肺がん
 disease_title <- c("原発性肺がん_腺癌", "原発性肺がん_扁平上皮がん", "原発性肺がん_小細胞がん", "原発性肺がん_その他",
                    "転移性肺がん", "リンパ腫", "その他の悪性腫瘍")
+#+ results='asis'
 for (i in 1:4) {
   temp_colname <- paste0("demog_disease_", i)
   temp_res_list <- Convert_aggregate_to_DF(output_demog_csv ,registration[ ,temp_colname] , disease_title[i])
   output_demog_csv <- temp_res_list[[1]]
   print(kable(KableList(temp_res_list[[2]]), format="markdown", align="r"))
+  cat("  \n")
 }
 output_name <- "原発性肺がん_その他詳細"
 #' ## `r output_name`
 temp_colname <- "disease_t1"
 assign(temp_colname, subset(registration, (!is.na(registration[ ,temp_colname])
                                            & registration[ ,"demog_disease_4"] == "該当する"))[ ,temp_colname])
-get(temp_colname)
-temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
-colnames(temp_df) <- kOutputColnames
-temp_df[ ,1] <- output_name
-temp_df[ ,2] <- get(temp_colname)
-temp_df[ ,3] <- 1
-output_demog_csv <- rbind(output_demog_csv, temp_df)
+output_demog_csv <- OutputFreetext(temp_colname, output_name, output_demog_csv)
 output_name <- "転移性肺がん"
 #' ### `r output_name`
 temp_colname <- paste0("demog_disease_", "5")
@@ -75,13 +79,7 @@ output_name <- "転移性肺がんの原発巣"
 temp_colname <- "disease_t3"
 assign(temp_colname, subset(registration, (!is.na(registration[ ,temp_colname])
                                            & registration[ ,"demog_disease_5"] == "該当する"))[ ,temp_colname])
-get(temp_colname)
-temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
-colnames(temp_df) <- kOutputColnames
-temp_df[ ,1] <- output_name
-temp_df[ ,2] <- get(temp_colname)
-temp_df[ ,3] <- 1
-output_demog_csv <- rbind(output_demog_csv, temp_df)
+output_demog_csv <- OutputFreetext(temp_colname, output_name, output_demog_csv)
 output_name <- "リンパ腫"
 #' ### `r output_name`
 temp_colname <- paste0("demog_disease_", "6")
@@ -99,13 +97,7 @@ output_name <- "その他の悪性腫瘍_その他詳細"
 temp_colname <- "disease_t2"
 assign(temp_colname, subset(registration, (!is.na(registration[ ,temp_colname])
                                            & registration[ ,"demog_disease_7"] == "該当する"))[ ,temp_colname])
-get(temp_colname)
-temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
-colnames(temp_df) <- kOutputColnames
-temp_df[ ,1] <- output_name
-temp_df[ ,2] <- get(temp_colname)
-temp_df[ ,3] <- 1
-output_demog_csv <- rbind(output_demog_csv, temp_df)
+output_demog_csv <- OutputFreetext(temp_colname, output_name, output_demog_csv)
 output_name <- "出血傾向の有無"
 #' ## `r output_name`
 temp_colname <- "bleeding"
@@ -117,13 +109,7 @@ output_name <- "出血傾向の有無_有の場合はその詳細"
 temp_bleeding_t1_df <- subset(registration, bleeding == "あり")
 temp_colname <- "bleeding_t1"
 assign(temp_colname, subset(temp_bleeding_t1_df, !is.na(temp_bleeding_t1_df[ ,temp_colname]))[ ,temp_colname])
-get(temp_colname)
-temp_df <- data.frame(matrix(rep(NA), ncol=length(kOutputColnames), nrow=length(get(temp_colname))))
-colnames(temp_df) <- kOutputColnames
-temp_df[ ,1] <- output_name
-temp_df[ ,2] <- get(temp_colname)
-temp_df[ ,3] <- 1
-output_demog_csv <- rbind(output_demog_csv, temp_df)
+output_demog_csv <- OutputFreetext(temp_colname, output_name, output_demog_csv)
 output_name <- "抗凝固薬の投与の有無"
 #' ## `r output_name`
 temp_colname <- "anticoagulation"
