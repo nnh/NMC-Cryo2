@@ -4,9 +4,11 @@
 
 # library, function section ------
 # install.packages("rmarkdown")
+# install.packages("sjlabelled")
 library(rmarkdown)
 library(rstudioapi)
 library(knitr)
+library(sjlabelled)
 knitr::opts_chunk$set(echo=F, comment=NA)
 # Getting the path of this program path
 if (Sys.getenv("R_PLATFORM") == "") {
@@ -24,3 +26,4 @@ source(paste0(source_path, "/common.R"))
 source(paste0(source_path, "/common_function.R"))
 render(paste0(source_path, "/demog.R"), output_dir=output_path, output_file="demog.html")
 render(paste0(source_path, "/ae.R"), output_dir=output_path, output_file="ae.html")
+render(paste0(source_path, "/treatment.R"), output_dir=output_path, output_file="treatment.html")

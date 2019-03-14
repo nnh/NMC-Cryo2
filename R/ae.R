@@ -1,3 +1,6 @@
+# ' ae.R
+# ' Created date: 2019/3/12
+# ' author: mariko ohtsuka
 # Main section ------
 # create dataframe for output
 output_ae1_csv <- data.frame(matrix(rep(NA, length(kOutputColnames)), nrow=1))[numeric(0), ]

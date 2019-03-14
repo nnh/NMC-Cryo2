@@ -37,9 +37,12 @@ for (i in 1:length(csv_list)) {
     "最終評価.csv" = "ae",
     "重症な有害事象.csv" = "sae"
   )
-  assign(temp_objectname, read.csv(paste0(input_path, "/", csv_list[i]), as.is=T, fileEncoding="cp932",
-                                   stringsAsFactors=F, na.strings=""))
-  assign(temp_objectname, get(temp_objectname)[-1, ])
+  temp_csv <- read.csv(paste0(input_path, "/", csv_list[i]), as.is=T, fileEncoding="cp932",
+                                   stringsAsFactors=F, na.strings="")
+  str_label <- as.matrix(temp_csv)[1, ]
+  temp_csv <- temp_csv[-1, ]
+  temp_csv <- set_label(temp_csv, str_label)
+  assign(temp_objectname, temp_csv)
 }
 all_qualification <- as.numeric(nrow(registration))
 # All registration
