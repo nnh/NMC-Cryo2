@@ -40,18 +40,20 @@ for (i in 1:length(csv_list)) {
   temp_label <- paste0(temp_objectname, "_labels")
   assign(temp_label, as.matrix(temp_csv)[1, ])
   temp_csv <- temp_csv[-1, ]
-#  temp_csv <- set_label(temp_csv, str_label)
   assign(temp_objectname, temp_csv)
 }
 # FAS
 treatment <- subset(rawdata_treatment, treat_date == "あり")
 treatment <- set_label(treatment, rawdata_treatment_labels)
 registration <- subset(rawdata_registration, subjid %in% treatment$subjid)
+registration <- set_label(registration, rawdata_registration_labels)
 ae <- subset(rawdata_ae, subjid %in% treatment$subjid)
+ae <- set_label(ae, rawdata_ae_labels)
 # Delete duplicate rows
 ae <- ae %>% dplyr::distinct(subjid, .keep_all=T)
 sae <- subset(rawdata_sae, subjid %in% treatment$subjid)
 all_qualification <- as.numeric(nrow(registration))
-# All registration
-#all_ptdata <- ptdata
-#all_registration <- as.numeric(nrow(all_ptdata))
+# N
+number_of_patients <- paste0("n=", all_qualification, " (", all_qualification / all_qualification * 100, "%)")
+#' ### `r number_of_patients`
+temp_N <- c("Number of cases", NA, all_qualification, all_qualification / all_qualification * 100)

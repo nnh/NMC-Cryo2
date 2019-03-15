@@ -18,10 +18,6 @@ kDisease <- "disease"
 # Main section ------
 # create dataframe for output
 output_demog_csv <- data.frame(matrix(rep(NA, length(kOutputColnames)), nrow=1))[numeric(0), ]
-# N
-number_of_patients <- paste0("n=", all_qualification, " (", all_qualification / all_qualification * 100, "%)")
-#' ### `r number_of_patients`
-temp_N <- c("Number of patients", NA, all_qualification, all_qualification / all_qualification * 100)
 output_demog_csv <- rbind(output_demog_csv, temp_N)
 colnames(output_demog_csv) <- kOutputColnames
 output_demog_csv <- ConvertFactor(output_demog_csv)
@@ -142,6 +138,7 @@ temp_colname <- "num_oxygen_L"
 temp_res_list <- Convert_summary_to_DF(output_demog_csv, temp_oxygen_L_df[ ,temp_colname], output_name)
 output_demog_csv <- temp_res_list[[1]]
 kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
+demog_oxygen_l <- temp_res_list[[2]]
 output_name <- "Sp02"
 #' ## `r output_name`
 registration$num_SpO2 <- as.numeric(registration$Sp02)
@@ -151,6 +148,7 @@ temp_colname <- "num_SpO2"
 temp_res_list <- Convert_summary_to_DF(output_demog_csv, registration[ ,temp_colname], "SpO2")
 output_demog_csv <- temp_res_list[[1]]
 kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
+demog_spo2 <- temp_res_list[[2]]
 # output csv
 write.csv(output_demog_csv, paste0(output_path, "/demog.csv"), row.names=F, fileEncoding = "cp932", na="")
 
