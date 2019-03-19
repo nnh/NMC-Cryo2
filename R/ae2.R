@@ -12,6 +12,8 @@ registration$table_header <- " "
 table1(~ oxygen| table_header, data=registration, overall=F)
 #' #### 酸素投与有の場合の酸素量
 kable(KableList(demog_oxygen_l), format="markdown", align="r")
+#' #### 酸素投与有の場合の酸素量 #17
+kable(KableList(demog_oxygen_l_2), format="markdown", align="r")
 #' #### SpO2
 kable(KableList(demog_spo2), format="markdown", align="r")
 #' #### Grade

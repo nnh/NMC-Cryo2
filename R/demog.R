@@ -139,6 +139,15 @@ temp_res_list <- Convert_summary_to_DF(output_demog_csv, temp_oxygen_L_df[ ,temp
 output_demog_csv <- temp_res_list[[1]]
 kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
 demog_oxygen_l <- temp_res_list[[2]]
+output_name <- "酸素投与量（L/分)_#17"
+#' ## `r output_name`
+temp_oxygen_L_df <- subset(registration, !is.na(registration$oxygen_L))
+temp_oxygen_L_df$num_oxygen_L <- as.numeric(temp_oxygen_L_df$oxygen_L)
+temp_colname <- "num_oxygen_L"
+temp_res_list <- Convert_summary_to_DF(output_demog_csv, temp_oxygen_L_df[ ,temp_colname], output_name)
+output_demog_csv <- temp_res_list[[1]]
+kable(KableList(temp_res_list[[2]]), format="markdown", align="r")
+demog_oxygen_l_2 <- temp_res_list[[2]]
 output_name <- "Sp02"
 #' ## `r output_name`
 registration$num_SpO2 <- as.numeric(registration$Sp02)
