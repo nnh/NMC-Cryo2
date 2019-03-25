@@ -6,27 +6,18 @@
 # install.packages("rmarkdown")
 # install.packages("sjlabelled")
 library(rmarkdown)
-library(rstudioapi)
 library(knitr)
 library(sjlabelled)
 library(dplyr)
 library(table1)
 knitr::opts_chunk$set(echo=F, comment=NA)
-# Getting the path of this program path
-if (Sys.getenv("R_PLATFORM") == "") {
-  this_program_path <- ""   # Windows
-} else {
-  this_program_path <- rstudioapi::getActiveDocumentContext()$path   # Mac
-}
-source_path <- getwd()
-if (this_program_path != "") {
-  temp_path <- unlist(strsplit(this_program_path, "/"))
-  source_path <- paste(temp_path[-length(temp_path)], collapse="/")
-}
 # all treatment
-source(paste0(source_path, "/common.R"))
-source(paste0(source_path, "/common_function.R"))
-render(paste0(source_path, "/demog.R"), output_dir=output_path, output_file="demog.html")
-render(paste0(source_path, "/ae.R"), output_dir=output_path, output_file="ae.html")
-render(paste0(source_path, "/treatment.R"), output_dir=output_path, output_file="treatment.html")
-render(paste0(source_path, "/ae2.R"), output_dir=output_path, output_file="ae2.html")
+save_wd <- getwd()
+setwd(paste0(save_wd, "/R"))
+source("./common.R", local=T)
+source("./common_function.R", local=T)
+render("./demog.R", output_dir=output_path, output_file="demog.html")
+render("./ae.R", output_dir=output_path, output_file="ae.html")
+render("./treatment.R", output_dir=output_path, output_file="treatment.html")
+render("./ae2.R", output_dir=output_path, output_file="ae2.html")
+setwd(save_wd)

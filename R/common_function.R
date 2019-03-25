@@ -1,5 +1,5 @@
 # Common function
-# Created date: 2019/3/1
+# Created date: 2019/3/22
 # Author: mariko ohtsuka
 # function section ------
 #' @title
@@ -23,7 +23,7 @@ AggregateLength <- function(target_column, column_name){
   df <- aggregate(target_column, by=list(target_column), length, drop=F)
   df[is.na(df)] <- 0
   if (nrow(df) > 0) {
-    df$per <- round(prop.table(df[2]) * 100, digits=1)
+    df$per <- round2(prop.table(df[2]) * 100, digits=1)
   } else {
     df <- data.frame(matrix(rep(NA), ncol=length(column_name), nrow=1))
   }
@@ -105,7 +105,7 @@ Aggregate_Sum_Group <- function(df_A, df_B, input_column_name, output_column_nam
   output_df <- Aggregate_Group(df_A, df_B, input_column_name, c(output_column_name, kCount, kPercentage))
   output_df[[kTableIndex]][col_sum_count] <- apply(output_df[[kTableIndex]][c(col_A_count, col_B_count)], 1, sum)
   output_df[[kTableIndex]]$sum_per <- apply(output_df[[kTableIndex]][col_sum_count], 2, function(x){
-    return(round(x / (output_df[[1]] + output_df[[3]]) * 100, digits=1))
+    return(round2(x / (output_df[[1]] + output_df[[3]]) * 100, digits=1))
   })
   return(output_df)
 }
@@ -126,13 +126,13 @@ Aggregate_Sum_Group <- function(df_A, df_B, input_column_name, output_column_nam
 SummaryValue <- function(input_column){
   target_na <- subset(input_column, is.na(input_column))
   target_column <- subset(input_column, !is.na(input_column))
-  temp_mean <- round(mean(target_column), digits=1)
+  temp_mean <- format(round2(mean(target_column), digits=1), nsmall=1)
   temp_summary <- summary(target_column)
   temp_median <- median(target_column)
-  temp_quantile <- round(quantile(target_column, type=2), digits=1)
+  temp_quantile <- quantile(target_column, type=2)
   temp_min <- min(target_column)
   temp_max <- max(target_column)
-  temp_sd <- round(sd(target_column), digits=1)
+  temp_sd <- format(round2(sd(target_column), digits=1), nsmall=1)
   return_list <- c(temp_mean, temp_sd, temp_median, temp_quantile[2], temp_quantile[4], temp_min, temp_max)
   names(return_list) <- c("Mean", "Sd.", "Median", "1st Qu.", "3rd Qu.", "Min.", "Max.")
   return(list(length(target_column), length(target_na), return_list))
@@ -159,7 +159,7 @@ Summary_Group <- function(df_A, df_B, column_name){
   df <- cbind(data.frame(temp_A[[kDfIndex]]), data.frame(temp_B[[kDfIndex]]))
   colnames(df) <- c(paste0(kGroup_A, "_", column_name), paste0(kGroup_B, "_", column_name))
   return_list <- list(temp_A[[kN_index]], temp_A[[kNA_index]], temp_B[[kN_index]], temp_B[[kNA_index]],
-                      round(df, digits=1))
+                      round2(df, digits=1))
   names(return_list) <- c(paste0(kGroup_A, "_例数"), paste0(kGroup_A, "_欠測数"),
                           paste0(kGroup_B, "_例数"), paste0(kGroup_B, "_欠測数"), NULL)
   return(return_list)
@@ -307,4 +307,26 @@ Convert_aggregate_to_DF <- function(output_df, target_column, output_item_name){
   }
   return_df <- rbind(output_df, temp_output_df)
   return(list(return_df, aggregate_list))
+}
+#' @title
+#' round2
+#' @description
+#' Customize round function
+#' Reference URL
+#' r - Round up from .5 - Stack Overflow
+#' https://stackoverflow.com/questions/12688717/round-up-from-5
+#' @param
+#' x : Number to be rounded
+#' digits : Number of decimal places
+#' @return
+#' Rounded number
+#' @examples
+#' round2(3.1415, 2)
+round2 <- function(x, digits) {
+  posneg = sign(x)
+  z = abs(x) * 10^digits
+  z = z + 0.5
+  z = trunc(z)
+  z = z / 10^digits
+  return(z * posneg)
 }
